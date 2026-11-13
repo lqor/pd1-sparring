@@ -1,0 +1,260 @@
+{
+ "meta": {
+  "version": "1.0.0",
+  "aligned_to": "Salesforce Certified Platform Developer exam guide, Summer '25 release",
+  "count": 12,
+  "note": "Original practice questions. Not real exam content. Not affiliated with Salesforce.",
+  "edition": "lite"
+ },
+ "questions": [
+  {
+   "id": "DF-005",
+   "section": "DF",
+   "topic": "roll-up-summary",
+   "difficulty": 2,
+   "stem": "Visit__c has a lookup relationship to Gym__c. The business wants the number of Visits displayed on each Gym. Which statement is true?",
+   "code": null,
+   "options": {
+    "A": "Roll-up summary fields need a master-detail relationship; with a lookup this needs a record-triggered flow or Apex, or the relationship must be converted",
+    "B": "A roll-up summary field on Gym__c will work because any relationship supports roll-ups",
+    "C": "A formula field on Gym__c can use COUNT() across the lookup",
+    "D": "A roll-up summary field should be created on Visit__c, the child object"
+   },
+   "answer": [
+    "A"
+   ],
+   "why": "Roll-up summary fields exist only on the master side of a master-detail relationship. Over a lookup you need automation (Flow or Apex) or a relationship change.",
+   "tell": "Roll-up summary = master-detail, created on the master. If the question says \"lookup\", the roll-up option is the trap.",
+   "multi": false
+  },
+  {
+   "id": "DF-011",
+   "section": "DF",
+   "topic": "external-id",
+   "difficulty": 2,
+   "stem": "An ERP sends account data nightly. Each record carries the ERP's own key, and the integration must create new Accounts and update existing ones without creating duplicates or querying Salesforce IDs first. What should be used?",
+   "code": null,
+   "options": {
+    "A": "An External ID field on Account and an upsert that matches on it",
+    "B": "A before-insert trigger that queries for duplicates by Name",
+    "C": "A unique text field and an insert call",
+    "D": "A duplicate rule and an insert call"
+   },
+   "answer": [
+    "A"
+   ],
+   "why": "upsert matches on an External ID field: one match updates, no match inserts, more than one match errors. No prior query for Salesforce IDs is needed.",
+   "tell": "\"External system's key\" plus \"create or update\" means External ID plus upsert.",
+   "multi": false
+  },
+  {
+   "id": "DF-023",
+   "section": "DF",
+   "topic": "strings",
+   "difficulty": 3,
+   "stem": "What does this code write to the debug log?",
+   "code": "String a = 'Apex';\nString b = 'APEX';\nSystem.debug(a == b);\nSystem.debug(a.equals(b));",
+   "options": {
+    "A": "true then true",
+    "B": "true then false",
+    "C": "false then false",
+    "D": "false then true"
+   },
+   "answer": [
+    "B"
+   ],
+   "why": "The == operator compares Strings case-insensitively, so it returns true. equals() does an exact comparison and returns false.",
+   "tell": "In Apex, == on Strings ignores case. equals() is case-sensitive. This is the opposite of what Java developers expect.",
+   "verify": "String a = 'Apex';\nString b = 'APEX';\nSystem.debug(a == b);\nSystem.debug(a.equals(b));",
+   "expect": [
+    "true",
+    "false"
+   ],
+   "multi": false
+  },
+  {
+   "id": "PAL-012",
+   "section": "PAL",
+   "topic": "soql-return-types",
+   "difficulty": 2,
+   "stem": "No Account is named 'Zzyzx Nonexistent'. What happens when this line runs?",
+   "code": "Account a = [SELECT Id FROM Account WHERE Name = 'Zzyzx Nonexistent'];",
+   "options": {
+    "A": "a is an empty Account with no Id",
+    "B": "A QueryException is thrown: List has no rows for assignment to SObject",
+    "C": "a is null",
+    "D": "A compile error"
+   },
+   "answer": [
+    "B"
+   ],
+   "why": "A query assigned to a single sObject variable throws when it returns no rows. Query into a List and check isEmpty() instead.",
+   "tell": "Assigning a query to a single sObject demands exactly one row. Zero rows or two or more rows both throw a QueryException. Assign to a List when you are not sure.",
+   "verify": "try {\n    Account a = [SELECT Id FROM Account WHERE Name = 'Zzyzx Nonexistent'];\n    System.debug('no exception');\n} catch (QueryException e) {\n    System.debug(e.getMessage());\n}",
+   "expect": [
+    "List has no rows for assignment to SObject"
+   ],
+   "multi": false
+  },
+  {
+   "id": "PAL-018",
+   "section": "PAL",
+   "topic": "dml-partial-success",
+   "difficulty": 2,
+   "stem": "An integration inserts 200 Leads in one call. Valid Leads must be saved even if some fail, and each failure must be logged. Which approach meets this?",
+   "code": null,
+   "options": {
+    "A": "Database.insert(leads, true);",
+    "B": "insert leads; inside a try/catch block",
+    "C": "Insert each Lead in its own DML statement inside a loop",
+    "D": "Database.insert(leads, false); then inspect each Database.SaveResult"
+   },
+   "answer": [
+    "D"
+   ],
+   "why": "Database.insert(records, false) saves the valid records and returns a SaveResult per record with isSuccess() and getErrors(). DML in a loop burns the 150 DML statement limit.",
+   "tell": "\"Partial success\" or \"some records may fail\" means a Database method with allOrNone set to false. The DML keyword is all-or-nothing.",
+   "multi": false
+  },
+  {
+   "id": "PAL-024",
+   "section": "PAL",
+   "topic": "triggers-context",
+   "difficulty": 2,
+   "stem": "What happens when this after insert trigger runs?",
+   "code": "trigger AccountTrigger on Account (after insert) {\n    for (Account a : Trigger.new) {\n        a.Description = 'Created by trigger';\n    }\n}",
+   "options": {
+    "A": "A runtime error occurs, because records in Trigger.new are read-only in after triggers",
+    "B": "Nothing happens; the change is silently ignored",
+    "C": "The trigger does not compile",
+    "D": "The Description is saved on every new Account"
+   },
+   "answer": [
+    "A"
+   ],
+   "why": "In after triggers, Trigger.new is read-only and an attempt to modify it throws a \"Record is read-only\" exception. Field changes on the same record belong in a before trigger.",
+   "tell": "After triggers see saved, read-only records. Use after triggers when you need the record Id or must touch other records.",
+   "multi": false
+  },
+  {
+   "id": "PAL-032",
+   "section": "PAL",
+   "topic": "order-of-execution",
+   "difficulty": 3,
+   "stem": "An Opportunity has a before update trigger that sets Region__c, and a validation rule that requires Region__c. A user saves an Opportunity with Region__c blank. What happens?",
+   "code": null,
+   "options": {
+    "A": "The result is unpredictable",
+    "B": "The save succeeds only if the trigger performs an update DML",
+    "C": "The save succeeds, because before triggers run before custom validation rules",
+    "D": "The validation rule fails, because validation rules run before triggers"
+   },
+   "answer": [
+    "C"
+   ],
+   "why": "Order of execution: before-save flows, then before triggers, then custom validation rules. The rule evaluates the value the trigger set.",
+   "tell": "Before triggers run before custom validation rules. That is why a before trigger can \"fix\" a record so it passes validation.",
+   "multi": false
+  },
+  {
+   "id": "UI-002",
+   "section": "UI",
+   "topic": "crud-fls",
+   "difficulty": 2,
+   "stem": "An @AuraEnabled method returns Contacts including Salary__c to a Lightning web component. Users without field access to Salary__c can still see it. Which change fixes this?",
+   "code": null,
+   "options": {
+    "A": "Add WITH USER_MODE to the SOQL query",
+    "B": "Declare the class with sharing",
+    "C": "Mark the method cacheable=true",
+    "D": "Add the field to the component's HTML only for admins"
+   },
+   "answer": [
+    "A"
+   ],
+   "why": "WITH USER_MODE enforces the running user's object and field permissions (and sharing) on the query. with sharing only enforces record-level access.",
+   "tell": "with sharing = which records. USER_MODE or stripInaccessible = which objects and fields. A field-visibility bug is never fixed by a sharing keyword.",
+   "multi": false
+  },
+  {
+   "id": "UI-015",
+   "section": "UI",
+   "topic": "lwc-apex",
+   "difficulty": 2,
+   "stem": "A component uses @wire(getContacts) to call an Apex method and fails at runtime. Which requirement is most likely missing on the Apex method?",
+   "code": null,
+   "options": {
+    "A": "It must be an instance method",
+    "B": "It must return void",
+    "C": "It must be annotated @InvocableMethod",
+    "D": "It must be annotated @AuraEnabled(cacheable=true)"
+   },
+   "answer": [
+    "D"
+   ],
+   "why": "The wire service only works with Apex methods marked @AuraEnabled(cacheable=true), which must be static and must not change data.",
+   "tell": "Wiring Apex requires cacheable=true. Cacheable methods cannot perform DML.",
+   "multi": false
+  },
+  {
+   "id": "UI-017",
+   "section": "UI",
+   "topic": "lwc-events",
+   "difficulty": 2,
+   "stem": "A child component must tell its parent which item the user selected. Which code does this?",
+   "code": null,
+   "options": {
+    "A": "@api select(itemId) { }",
+    "B": "this.dispatchEvent(new CustomEvent('select', { detail: itemId }));",
+    "C": "this.parent.handleSelect(itemId);",
+    "D": "publish(this.messageContext, SELECT_CHANNEL, itemId);"
+   },
+   "answer": [
+    "B"
+   ],
+   "why": "The child dispatches a CustomEvent with the data in detail, and the parent handles it with onselect in its template.",
+   "tell": "Data flows down with properties and up with events. Child to parent = CustomEvent, parent listens with on + event name.",
+   "multi": false
+  },
+  {
+   "id": "TDD-004",
+   "section": "TDD",
+   "topic": "start-stop-test",
+   "difficulty": 2,
+   "stem": "What is the purpose of wrapping the code under test between Test.startTest() and Test.stopTest()?",
+   "code": null,
+   "options": {
+    "A": "It commits test data to the database",
+    "B": "It makes the code run as a different user",
+    "C": "It gives that block a fresh set of governor limits, and asynchronous work it starts is run when stopTest() is called",
+    "D": "It disables triggers and validation rules"
+   },
+   "answer": [
+    "C"
+   ],
+   "why": "Code between the two calls gets its own governor limits, and any future, queueable, batch or scheduled work enqueued there executes synchronously at stopTest().",
+   "tell": "startTest and stopTest separate set-up from the code being measured, and stopTest forces async code to finish.",
+   "multi": false
+  },
+  {
+   "id": "TDD-025",
+   "section": "TDD",
+   "topic": "deployment-test-levels",
+   "difficulty": 3,
+   "stem": "Apex classes are deployed to production with the Salesforce CLI and no test level is specified. Which tests run?",
+   "code": null,
+   "options": {
+    "A": "No tests",
+    "B": "Only the tests in the deployment",
+    "C": "All tests in the org, including managed package tests",
+    "D": "All local tests in the org, excluding tests from installed managed packages"
+   },
+   "answer": [
+    "D"
+   ],
+   "why": "When a production deployment includes Apex classes or triggers, the default test level runs all local tests (not managed package tests).",
+   "tell": "Production deployments that contain Apex default to RunLocalTests. NoTestRun is only the default for non-production orgs.",
+   "multi": false
+  }
+ ]
+}

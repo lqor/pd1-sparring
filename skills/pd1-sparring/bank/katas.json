@@ -1,0 +1,19 @@
+{
+ "katas": [
+  {
+   "id": "K02",
+   "section": "DF",
+   "topic": "collections",
+   "minutes": 8,
+   "title": "Count by stage",
+   "brief": "Write `countByStage`, which takes a list of Opportunities and returns a Map from StageName to how many Opportunities are in that stage. An empty list returns an empty map.",
+   "starter": "Map<String, Integer> countByStage(List<Opportunity> opps) {\n    // your code\n}",
+   "harness": "List<Opportunity> kOpps = new List<Opportunity>{\n    new Opportunity(StageName = 'Prospecting'),\n    new Opportunity(StageName = 'Closed Won'),\n    new Opportunity(StageName = 'Prospecting'),\n    new Opportunity(StageName = 'Negotiation'),\n    new Opportunity(StageName = 'Prospecting')\n};\nMap<String, Integer> kRes = countByStage(kOpps);\nSystem.assertEquals(3, kRes.size(), 'Three distinct stages expected');\nSystem.assertEquals(3, kRes.get('Prospecting'), 'Prospecting appears three times');\nSystem.assertEquals(1, kRes.get('Closed Won'), 'Closed Won appears once');\nSystem.assertEquals(1, kRes.get('Negotiation'), 'Negotiation appears once');\nSystem.assertEquals(0, countByStage(new List<Opportunity>()).size(), 'Empty in, empty map out');\nSystem.debug('KATA_PASS');",
+   "reference": "Map<String, Integer> countByStage(List<Opportunity> opps) {\n    Map<String, Integer> counts = new Map<String, Integer>();\n    for (Opportunity o : opps) {\n        Integer current = counts.get(o.StageName);\n        counts.put(o.StageName, current == null ? 1 : current + 1);\n    }\n    return counts;\n}",
+   "hints": [
+    "map.get(key) returns null when the key is missing. Handle the first time you see a stage.",
+    "containsKey, or the ?? operator, both work."
+   ]
+  }
+ ]
+}
