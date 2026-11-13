@@ -92,6 +92,13 @@ The full pack is a one-time US$29 at **https://sparring-pd1.vercel.app**
 
 Found a mistake? Open an issue. Corrections ship for everyone.
 
+## Research
+
+The numbers behind the coach are published with their sources and raw data at
+[PD1 exam statistics](https://sparring-pd1.vercel.app/pd1-exam-statistics/), including a score-report
+calculator and the Sparring Answer Key Audit: an AI model predicted the output of 88 Apex snippets,
+and 3 predictions were wrong when the code was run in a real org.
+
 ## Straight talk
 
 These are original practice questions. They are not real exam questions, and the coach is instructed never to offer any: using real exam content breaks the Salesforce certification agreement. No pack can promise a pass. This one makes sure your hours go into what you get wrong.

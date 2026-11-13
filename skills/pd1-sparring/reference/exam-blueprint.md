@@ -79,7 +79,9 @@ Callouts still show up at the edges (async Apex, test mocks), but integration de
   UI technologies. It rewards recognition (which tool, which decorator, which controller type) far more
   than the ability to build pages. Do not try to learn LWC, Aura and Visualforce deeply for this exam.
 - A version line of Summer '25 means: when newer releases change a default or add a feature, the exam
-  still expects the Summer '25 behaviour until Salesforce updates this guide.
+  still expects the Summer '25 behaviour until Salesforce updates this guide. A live example: the Apex
+  heap limit was 6 MB synchronous and 12 MB asynchronous in Summer '25, and Winter '27 raised it to
+  10 MB and 25 MB. A current org reports the new numbers; the exam is still pinned to the old ones.
 
 ## Recommended official material (free)
 
