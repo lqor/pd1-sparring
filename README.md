@@ -36,12 +36,6 @@ Say the rule back to me in one sentence. This one returns tomorrow.
 
 ## Install
 
-**Any agent supported by the `skills` CLI**
-
-```bash
-npx skills add lqor/pd1-sparring
-```
-
 **Claude Code, by hand**
 
 ```bash
